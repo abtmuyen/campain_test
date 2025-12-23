@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Tết 2025</title>
+    <style>
+        :root { --red: #d32f2f; --gold: #ffd700; }
+        body { font-family: sans-serif; background: #fff5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        #quiz-container { background: white; width: 90%; max-width: 450px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border: 2px solid var(--red); }
+        .question { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: var(--red); }
+        .options button { display: block; width: 100%; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; background: white; cursor: pointer; transition: 0.3s; }
+        .options button:hover { background: var(--red); color: white; }
+        .hidden { display: none; }
+        .result-card { background: var(--red); color: white; padding: 20px; border-radius: 15px; }
+    </style>
+</head>
+<body>
+<div id="quiz-container">
+    <div id="start-screen">
+        <h2 style="color: var(--red);">TẾT NÀY BẠN LÀ "HỆ" GÌ?</h2>
+        <p>Làm test nhanh nhận lì xì xịn!</p>
+        <button onclick="startQuiz()" style="background: var(--red); color: white; padding: 15px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;">BẮT ĐẦU</button>
+    </div>
+    <div id="quiz-screen" class="hidden">
+        <div id="question-text" class="question"></div>
+        <div id="options-container" class="options"></div>
+    </div>
+    <div id="result" class="hidden">
+        <h2>Kết quả của bạn:</h2>
+        <div class="result-card">
+            <h1 id="character-name"></h1>
+            <p id="character-desc"></p>
+        </div>
+        <button onclick="location.reload()" style="margin-top:20px; border:none; background:none; color:var(--red); cursor:pointer;">Làm lại</button>
+    </div>
+</div>
+<script>
+    const questions = [
+        { q: "Thấy trend 'Ăn nho gầm bàn', bạn sẽ?", options: [{t:"Làm clip bắt trend", type:"GenZ"}, {t:"Bán nho cho hội bắt trend", type:"Seller"}] },
+        { q: "Sáng mùng 1 bạn thường làm gì?", options: [{t:"Check đơn hàng", type:"Seller"}, {t:"Đi chụp ảnh sống ảo", type:"GenZ"}] }
+    ];
+    let currentIdx = 0; let scores = { Seller: 0, GenZ: 0 };
+    function startQuiz() { document.getElementById('start-screen').classList.add('hidden'); document.getElementById('quiz-screen').classList.remove('hidden'); showQuestion(); }
+    function showQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('question-text').innerText = q.q;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        q.options.forEach(opt => {
+            const btn = document.createElement('button'); btn.innerText = opt.t;
+            btn.onclick = () => { scores[opt.type]++; currentIdx++; if(currentIdx < questions.length) showQuestion(); else showResult(); };
+            container.appendChild(btn);
+        });
+    }
+    function showResult() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+        const winner = scores.Seller > scores.GenZ ? "Seller" : "GenZ";
+        const data = {
+            Seller: { n: "CHIẾN THẦN CHỐT ĐƠN", d: "Bạn là trùm kinh doanh, Tết này lộc lá đầy nhà!" },
+            GenZ: { n: "HỆ GƯƠNG MẶT ĐẠI DIỆN", d: "Tết này bạn là tâm điểm của mọi cuộc vui!" }
+        };
+        document.getElementById('character-name').innerText = data[winner].n;
+        document.getElementById('character-desc').innerText = data[winner].d;
+    }
+</script>
+</body>
+</html>
